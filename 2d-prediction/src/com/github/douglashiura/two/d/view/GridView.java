@@ -39,10 +39,10 @@ public class GridView extends JFrame {
 			public void run() {
 				Integer height = 10;
 
-				List<Point> points = new GridFactory(height).build();
-				Ball ball = new Ball(Directions.BELOW, points.get(0));
+				GridFactory grid = new GridFactory(height, 2, 4, 9).build();
+				Ball ball = new Ball(Directions.BELOW, grid.getPoints().get(0));
 
-				GridView view = new GridView(points, height);
+				GridView view = new GridView(grid.getPoints(), height);
 				new Thread() {
 					@Override
 					public void run() {

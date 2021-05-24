@@ -1,12 +1,13 @@
 package com.github.douglashiura.two.d;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Ball {
+public class Ball implements Colorable {
 
 	private Directions run;
 	private Point point;
@@ -15,7 +16,7 @@ public class Ball {
 	public Ball(Directions run, Point point) {
 		this.run = run;
 		this.point = point;
-		this.point.setBall(this);
+		this.point.addBall(this);
 		adjustCurve(run);
 	}
 
@@ -32,15 +33,15 @@ public class Ball {
 
 	public List<Point> run() {
 		Collections.shuffle(curves);
-		Directions curve=curves.get(0);
+		Directions curve = curves.get(0);
 		curves.clear();
 		curves.add(run);
 		Point newPoint = point.getNeighbor(curve);
 		try {
 			newPoint.hashCode();
-			point.setEmpty();
+			point.removeBall(this);
 			point = newPoint;
-			point.setBall(this);
+			point.addBall(this);
 			return Arrays.asList(newPoint, point);
 		} catch (Exception border) {
 			run = newDirection();
@@ -59,4 +60,12 @@ public class Ball {
 		return oposites.get(0);
 	}
 
+	@Override
+	public Color getColor() {
+		return Color.YELLOW;
+	}
+	@Override
+	public Color getBorder() {
+		return Color.YELLOW;
+	}
 }

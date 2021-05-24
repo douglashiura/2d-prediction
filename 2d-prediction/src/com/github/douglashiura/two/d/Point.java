@@ -1,17 +1,18 @@
 package com.github.douglashiura.two.d;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Point {
+public class Point implements Colorable {
 
 	private Integer x;
 	private Integer y;
 	private Map<Directions, Point> neighbors;
 	private List<Directions> borders;
-	private Ball ball;
+	private List<Colorable> colors;
 
 	// sun | above | kun
 	// left | this | right
@@ -22,6 +23,8 @@ public class Point {
 		this.y = y;
 		neighbors = new HashMap<Directions, Point>(8);
 		borders = new LinkedList<Directions>();
+		colors = new LinkedList<Colorable>();
+		colors.add(new DefaultColor());
 	}
 
 	public Point getNeighbor(Directions run) {
@@ -108,16 +111,25 @@ public class Point {
 		return borders;
 	}
 
-	public void setEmpty() {
-		ball = null;
+	public void addBall(Ball ball) {
+		colors.add(ball);
 	}
 
-	public Ball getBall() {
-		return ball;
+	public void removeBall(Ball ball) {
+		colors.remove(ball);
 	}
 
-	public void setBall(Ball ball) {
-		this.ball = ball;
-		
+	@Override
+	public Color getColor() {
+		return colors.get(colors.size() - 1).getColor();
+	}
+
+	@Override
+	public Color getBorder() {
+		return colors.get(colors.size() - 1).getBorder();
+	}
+
+	public void addSensor(Sensor sensor) {
+		colors.add(sensor);
 	}
 }

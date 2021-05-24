@@ -49,7 +49,7 @@ public class EightPuzzleTest {
 
 	@Test
 	public void factory() throws Exception {
-		List<Point> points = new GridFactory(1).build();
+		List<Point> points = new GridFactory(1).build().getPoints();
 		Point zero = points.get(0);
 		assertEquals(1, points.size());
 		assertNull(zero.getSun());
@@ -66,7 +66,7 @@ public class EightPuzzleTest {
 
 	@Test
 	public void four() throws Exception {
-		List<Point> points = new GridFactory(3).build();
+		List<Point> points = new GridFactory(3).build().getPoints();
 		Point zero = points.get(0);
 		Point one = points.get(1);
 		Point two = points.get(2);
@@ -117,12 +117,6 @@ public class EightPuzzleTest {
 		assertEquals(2, eight.getBorders().size());
 		assertEquals(Directions.RIGHT, eight.getBorders().get(0));
 		assertEquals(Directions.BELOW, eight.getBorders().get(1));
-			
-		
-		
-		
-	
-	
 	
 	}
 

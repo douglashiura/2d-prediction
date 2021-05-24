@@ -24,9 +24,9 @@ public class HomeView extends JLabel {
 
 	@Override
 	public void update(Graphics g) {
-		setBorder(BorderFactory.createLineBorder(home.getBall() == null ? Color.BLACK : Color.YELLOW));
-		setForeground(home.getBall() == null ? Color.WHITE : Color.YELLOW);
-		setBackground(home.getBall() == null ? Color.WHITE : Color.YELLOW);
+		setBorder(BorderFactory.createLineBorder(home.getBorder()));
+		setForeground(home.getColor());
+		setBackground(home.getColor());
 		setOpaque(true);
 		super.update(g);
 	}
