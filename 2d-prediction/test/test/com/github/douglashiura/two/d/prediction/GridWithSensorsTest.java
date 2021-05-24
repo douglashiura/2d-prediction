@@ -1,12 +1,15 @@
 package test.com.github.douglashiura.two.d.prediction;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
 import java.util.List;
 
 import org.junit.Test;
 
+import com.github.douglashiura.two.d.Ball;
+import com.github.douglashiura.two.d.Directions;
 import com.github.douglashiura.two.d.GridFactory;
 import com.github.douglashiura.two.d.Point;
 import com.github.douglashiura.two.d.Sensor;
@@ -47,6 +50,20 @@ public class GridWithSensorsTest {
 		assertEquals(Color.BLUE, five.getColor());
 		assertEquals(Color.BLUE, six.getColor());
 		assertEquals(Color.BLUE, eight.getColor());
+	}
+
+	@Test
+	public void sensorTouch() throws Exception {
+		Integer[] sensorsColumns = { 0, 2 };
+		TestListener test = new TestListener();
+		GridFactory build = new GridFactory(3, test, sensorsColumns).build();
+		List<Point> points = build.getPoints();
+		List<Sensor> sensors = build.getSensors();
+		Point zero = points.get(0);
+		new Ball(Directions.ABOVE, zero);
+		assertEquals(zero, sensors.get(0).getLastTouch());
+		assertEquals(Integer.valueOf(-1), sensors.get(1).getLastTouch().getX());
+		assertTrue(test.isTouched());
 	}
 
 }

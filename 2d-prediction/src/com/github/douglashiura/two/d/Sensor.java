@@ -6,11 +6,14 @@ import java.util.List;
 public class Sensor implements Colorable {
 
 	private List<Point> points;
+	private Point lastTouch;
+	private Listener listener;
 
-	public Sensor(List<Point> points) {
+	public Sensor(List<Point> points, Listener listener) {
 		this.points = points;
+		this.listener = listener;
+		lastTouch = new DefaultPoint();
 		installSensor();
-
 	}
 
 	private void installSensor() {
@@ -31,6 +34,15 @@ public class Sensor implements Colorable {
 	@Override
 	public Color getBorder() {
 		return Color.BLACK;
+	}
+
+	public void touch(Point point, Ball ball) {
+		lastTouch = point;
+		listener.detection();
+	}
+
+	public Point getLastTouch() {
+		return lastTouch;
 	}
 
 }

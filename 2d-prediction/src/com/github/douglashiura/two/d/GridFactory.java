@@ -9,7 +9,7 @@ public class GridFactory {
 	private Integer size;
 	private List<Sensor> sensors;
 
-	public GridFactory(Integer size, Integer... sensors) {
+	public GridFactory(Integer size, Listener listener, Integer... sensors) {
 		this.size = size;
 		points = new ArrayList<Point>(size * size);
 		this.sensors = new ArrayList<>(sensors.length);
@@ -32,21 +32,25 @@ public class GridFactory {
 		setBorderLeft(grid);
 		setBorderRight(grid);
 		setBorderBelow(grid);
-		createSensors(grid, sensors);
+		createSensors(grid, sensors, listener);
 	}
 
-	private void createSensors(Point[][] grid, Integer[] sensors) {
+	public GridFactory(Integer size, Integer... sensors) {
+		this(size, Listener.EMPTY, sensors);
+	}
+
+	private void createSensors(Point[][] grid, Integer[] sensors, Listener listener) {
 		for (int i = 0; i < sensors.length; i++) {
-			this.sensors.add(createASensor(sensors[i], grid));
+			this.sensors.add(createASensor(sensors[i], grid, listener));
 		}
 	}
 
-	private Sensor createASensor(Integer column, Point[][] grid) {
-		List<Point> columnPoints= new ArrayList<Point>(size);
+	private Sensor createASensor(Integer column, Point[][] grid, Listener listener) {
+		List<Point> columnPoints = new ArrayList<Point>(size);
 		for (int y = 0; y < size; y++) {
 			columnPoints.add(grid[column][y]);
 		}
-		Sensor sensor= new Sensor(columnPoints);
+		Sensor sensor = new Sensor(columnPoints, listener);
 		return sensor;
 	}
 

@@ -37,24 +37,18 @@ public class GridView extends JFrame {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Integer height = 10;
-
-				GridFactory grid = new GridFactory(height, 2, 4, 9).build();
+				Integer height = 15;
+				ConsoleSensorData listener = new ConsoleSensorData();
+				GridFactory grid = new GridFactory(height, listener, 3, 6, 14).build();
+				listener.setSensors(grid.getSensors());
 				Ball ball = new Ball(Directions.BELOW, grid.getPoints().get(0));
-
 				GridView view = new GridView(grid.getPoints(), height);
 				new Thread() {
 					@Override
 					public void run() {
 						while (true) {
 							view.updatePoints(ball.run());
-							try {
-								sleep(50);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
 						}
-
 					}
 				}.start();
 			}
@@ -64,7 +58,7 @@ public class GridView extends JFrame {
 
 	protected void updatePoints(List<Point> points) {
 		for (HomeView home : homes) {
-			home.update(getGraphics());
+			home.update(home.getGraphics());
 		}
 	}
 
