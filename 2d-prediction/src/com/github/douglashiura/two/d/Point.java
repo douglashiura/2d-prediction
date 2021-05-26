@@ -14,6 +14,7 @@ public class Point implements Colorable {
 	private List<Directions> borders;
 	private List<Colorable> colors;
 	private List<Sensor> sensors;
+	private List<Directions> unMoves;
 
 	// sun | above | kun
 	// left | this | right
@@ -26,7 +27,8 @@ public class Point implements Colorable {
 		borders = new LinkedList<Directions>();
 		colors = new LinkedList<Colorable>();
 		colors.add(new DefaultColor());
-		sensors= new LinkedList<Sensor>();
+		sensors = new LinkedList<Sensor>();
+		unMoves = new LinkedList<Directions>();
 	}
 
 	public Point getNeighbor(Directions run) {
@@ -115,7 +117,7 @@ public class Point implements Colorable {
 
 	public void addBall(Ball ball) {
 		colors.add(ball);
-		sensors.forEach(sensor-> sensor.touch(this,ball));
+		sensors.forEach(sensor -> sensor.touch(this, ball));
 	}
 
 	public void removeBall(Ball ball) {
@@ -135,5 +137,13 @@ public class Point implements Colorable {
 	public void addSensor(Sensor sensor) {
 		colors.add(sensor);
 		sensors.add(sensor);
+	}
+
+	public void removeOpositesDirection(Directions direction) {
+		unMoves.add(direction);
+	}
+
+	public List<Directions> getUnMoves() {
+		return unMoves;
 	}
 }

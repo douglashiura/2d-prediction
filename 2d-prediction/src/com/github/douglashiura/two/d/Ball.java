@@ -17,14 +17,15 @@ public class Ball implements Colorable {
 		this.run = run;
 		this.point = point;
 		this.point.addBall(this);
-		adjustCurve(run);
+		adjustCurve(run, point);
 	}
 
-	private void adjustCurve(Directions run) {
+	private void adjustCurve(Directions run, Point point) {
 		curves = new ArrayList<>(run.possibilities());
 		curves.add(run);
 		curves.add(run);
 		curves.add(run);
+		curves.removeAll(point.getUnMoves());
 	}
 
 	public Directions getRun() {
@@ -45,7 +46,7 @@ public class Ball implements Colorable {
 			return Arrays.asList(newPoint, point);
 		} catch (Exception border) {
 			run = newDirection();
-			adjustCurve(run);
+			adjustCurve(run, point);
 			return Collections.emptyList();
 		}
 	}
@@ -64,6 +65,7 @@ public class Ball implements Colorable {
 	public Color getColor() {
 		return Color.YELLOW;
 	}
+
 	@Override
 	public Color getBorder() {
 		return Color.YELLOW;

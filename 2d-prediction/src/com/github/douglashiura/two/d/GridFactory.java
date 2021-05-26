@@ -33,6 +33,36 @@ public class GridFactory {
 		setBorderRight(grid);
 		setBorderBelow(grid);
 		createSensors(grid, sensors, listener);
+		removeBordersContinuationDirection(grid);
+	}
+
+	private void removeBordersContinuationDirection(Point[][] grid) {
+		removeContinuationLeftAndRight(grid);
+		removeUnContiuationOfTopAndFooter(grid);
+
+	}
+
+	private void removeUnContiuationOfTopAndFooter(Point[][] grid) {
+		for (int x = 0; x < size; x++) {
+			Point left = grid[x][0];
+			left.removeOpositesDirection(Directions.ABOVE);
+			left.removeOpositesDirection(Directions.BELOW);
+			Point right = grid[x][size - 1];
+			right.removeOpositesDirection(Directions.ABOVE);
+			right.removeOpositesDirection(Directions.BELOW);
+		}
+		
+	}
+
+	private void removeContinuationLeftAndRight(Point[][] grid) {
+		for (int y = 0; y < size; y++) {
+			Point left = grid[0][y];
+			left.removeOpositesDirection(Directions.ABOVE);
+			left.removeOpositesDirection(Directions.BELOW);
+			Point right = grid[size - 1][y];
+			right.removeOpositesDirection(Directions.ABOVE);
+			right.removeOpositesDirection(Directions.BELOW);
+		}
 	}
 
 	public GridFactory(Integer size, Integer... sensors) {
@@ -40,9 +70,11 @@ public class GridFactory {
 	}
 
 	private void createSensors(Point[][] grid, Integer[] sensors, Listener listener) {
-		for (int i = 0; i < sensors.length; i++) {
-			this.sensors.add(createASensor(sensors[i], grid, listener));
+		for (int i = 0; i < sensors.length - 1; i++) {
+			this.sensors.add(createASensor(sensors[i], grid, Listener.EMPTY));
 		}
+		this.sensors.add(createASensor(sensors[sensors.length - 1], grid, listener));
+
 	}
 
 	private Sensor createASensor(Integer column, Point[][] grid, Listener listener) {
