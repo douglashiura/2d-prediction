@@ -1,6 +1,7 @@
 package test.com.github.douglashiura.two.d.prediction;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
@@ -53,8 +54,8 @@ public class GridWithSensorsTest {
 	}
 
 	@Test
-	public void sensorTouch() throws Exception {
-		Integer[] sensorsColumns = { 0, 2 };
+	public void sensorNotTouchedYet() throws Exception {
+		Integer[] sensorsColumns = { 0, 1 };
 		TestListener test = new TestListener();
 		GridFactory build = new GridFactory(3, test, sensorsColumns).build();
 		List<Point> points = build.getPoints();
@@ -63,6 +64,21 @@ public class GridWithSensorsTest {
 		new Ball(Directions.ABOVE, zero);
 		assertEquals(zero, sensors.get(0).getLastTouch());
 		assertEquals(Integer.valueOf(-1), sensors.get(1).getLastTouch().getX());
+		assertNull(test.isTouched());
+	}
+
+	@Test
+	public void sensorTouched() throws Exception {
+		Integer[] sensorsColumns = { 0, 1 };
+		TestListener test = new TestListener();
+		GridFactory build = new GridFactory(3, test, sensorsColumns).build();
+		List<Point> points = build.getPoints();
+		List<Sensor> sensors = build.getSensors();
+		Point zero = points.get(0);
+		Ball ball = new Ball(Directions.RIGHT, zero);
+		ball.run();
+		assertEquals(zero, sensors.get(0).getLastTouch());
+		assertEquals(Integer.valueOf(1), sensors.get(1).getLastTouch().getX());
 		assertTrue(test.isTouched());
 	}
 

@@ -41,9 +41,10 @@ public class Ball implements Colorable {
 		try {
 			newPoint.hashCode();
 			point.removeBall(this);
+			newPoint.addBall(this);
+			Point oldPoint = point;
 			point = newPoint;
-			point.addBall(this);
-			return Arrays.asList(newPoint, point);
+			return Arrays.asList( oldPoint, newPoint);
 		} catch (Exception border) {
 			run = newDirection();
 			adjustCurve(run, point);

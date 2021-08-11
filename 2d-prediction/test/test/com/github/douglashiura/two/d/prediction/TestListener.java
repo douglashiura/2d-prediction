@@ -12,7 +12,6 @@ public class TestListener implements Listener {
 	@Override
 	public void detection() {
 		touched = true;
-
 	}
 
 }

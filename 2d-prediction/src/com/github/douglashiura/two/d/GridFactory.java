@@ -9,17 +9,23 @@ public class GridFactory {
 	private Integer size;
 	private List<Sensor> sensors;
 
+	public GridFactory(Integer size, Integer... sensors) {
+		this(size, Listener.EMPTY, sensors);
+	}
+
 	public GridFactory(Integer size, Listener listener, Integer... sensors) {
+		this(size, listener, new SensorStrategy.ManySensors(size, sensors));
+
+	}
+
+	public GridFactory(Integer size) {
+		this(size, Listener.EMPTY, SensorStrategy.NONE);
+	}
+
+	public GridFactory(Integer size, Listener listener, SensorStrategy sensors) {
 		this.size = size;
 		points = new ArrayList<Point>(size * size);
-		this.sensors = new ArrayList<>(sensors.length);
-		Point[][] grid = new Point[size][size];
-		for (int y = 0; y < size; y++) {
-			for (int x = 0; x < size; x++) {
-				grid[x][y] = new Point(x, y);
-				points.add(grid[x][y]);
-			}
-		}
+		Point[][] grid = createGrid(size);
 		setSun(grid);
 		setAbove(grid);
 		setKun(grid);
@@ -32,8 +38,19 @@ public class GridFactory {
 		setBorderLeft(grid);
 		setBorderRight(grid);
 		setBorderBelow(grid);
-		createSensors(grid, sensors, listener);
+		this.sensors = sensors.createSensors(grid, listener);
 		removeBordersContinuationDirection(grid);
+	}
+
+	private Point[][] createGrid(Integer size) {
+		Point[][] grid = new Point[size][size];
+		for (int y = 0; y < size; y++) {
+			for (int x = 0; x < size; x++) {
+				grid[x][y] = new Point(x, y);
+				points.add(grid[x][y]);
+			}
+		}
+		return grid;
 	}
 
 	private void removeBordersContinuationDirection(Point[][] grid) {
@@ -51,7 +68,7 @@ public class GridFactory {
 			right.removeOpositesDirection(Directions.ABOVE);
 			right.removeOpositesDirection(Directions.BELOW);
 		}
-		
+
 	}
 
 	private void removeContinuationLeftAndRight(Point[][] grid) {
@@ -63,27 +80,6 @@ public class GridFactory {
 			right.removeOpositesDirection(Directions.ABOVE);
 			right.removeOpositesDirection(Directions.BELOW);
 		}
-	}
-
-	public GridFactory(Integer size, Integer... sensors) {
-		this(size, Listener.EMPTY, sensors);
-	}
-
-	private void createSensors(Point[][] grid, Integer[] sensors, Listener listener) {
-		for (int i = 0; i < sensors.length - 1; i++) {
-			this.sensors.add(createASensor(sensors[i], grid, Listener.EMPTY));
-		}
-		this.sensors.add(createASensor(sensors[sensors.length - 1], grid, listener));
-
-	}
-
-	private Sensor createASensor(Integer column, Point[][] grid, Listener listener) {
-		List<Point> columnPoints = new ArrayList<Point>(size);
-		for (int y = 0; y < size; y++) {
-			columnPoints.add(grid[column][y]);
-		}
-		Sensor sensor = new Sensor(columnPoints, listener);
-		return sensor;
 	}
 
 	private void setBorderBelow(Point[][] grid) {
